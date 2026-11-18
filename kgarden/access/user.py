@@ -138,4 +138,14 @@ def app_access(user: str, app_code: str) -> dict:
 		# One role per app; scopes are the union of the rows (an empty scope means everything).
 		result.update(granted=True, role=rows[0].app_role,
 		              scopes=[] if any(not r.scope_value for r in rows) else [r.scope_value for r in rows])
+	result["scope_refs"] = scope_refs(app.scope_doctype, result["scopes"])
 	return result
+
+
+def scope_refs(scope_doctype: str | None, scopes: list[str]) -> dict[str, str]:
+	"""The app's own ids of the scope records, when the records carry one (``kg_cerp_id`` on a
+	Project booked from ConstructionERP), so the app does not have to look ERPNext names up."""
+	if not scope_doctype or not scopes or not frappe.get_meta(scope_doctype).has_field("kg_cerp_id"):
+		return {}
+	rows = frappe.get_all(scope_doctype, filters={"name": ["in", scopes]}, fields=["name", "kg_cerp_id"])
+	return {r.name: r.kg_cerp_id for r in rows if r.kg_cerp_id}

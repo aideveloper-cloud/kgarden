@@ -35,7 +35,8 @@ APPS = [
 		"app_code": "CERP",
 		"app_name": "ConstructionERP (KGF Construction)",
 		"scope_doctype": "Project",
-		"redirect": "http://127.0.0.1:5173/auth/kgarden/callback",
+		"redirect": "http://127.0.0.1:5173/auth/oidc/callback",  # ConstructionERP's own OIDC callback route
+		"token_auth": "Client Secret Post",  # ConstructionERP sends the secret in the form body
 		"base_url": "http://127.0.0.1:5173",
 		"roles": [
 			("viewer", "ดูอย่างเดียว", ""),
@@ -97,7 +98,7 @@ def _oauth_client(spec) -> str:
 			"grant_type": "Authorization Code",
 			"response_type": "Code",
 			"skip_authorization": 1,  # company apps: no consent screen
-			"token_endpoint_auth_method": "Client Secret Basic",
+			"token_endpoint_auth_method": spec.get("token_auth", "Client Secret Basic"),
 		}
 	).insert(ignore_permissions=True)
 	return doc.name

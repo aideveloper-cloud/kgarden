@@ -61,5 +61,6 @@ def openid_profile(*args, **kwargs):
 			"kg_scope_doctype": access.get("scope_doctype", ""),
 			"kg_superadmin": access.get("superadmin", False),
 			"kg_employee_code": access.get("employee_code", ""),
+			"kg_scope_refs": access.get("scope_refs", {}),
 		}
 	)
