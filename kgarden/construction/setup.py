@@ -19,12 +19,23 @@ COST_ITEMS = {
 	"CON-OTHER": "ค่าใช้จ่ายอื่น (Other)",
 }
 
+# Thai WHT deducted when paying suppliers, owed to the Revenue Department (ภ.ง.ด.3 / 53).
+WHT_ACCOUNT_NAME = "ภาษีหัก ณ ที่จ่ายค้างจ่าย"
+
 API_USER = "cerp.integration@example.com"
-API_ROLES = ("Purchase User", "Purchase Manager", "Purchase Master Manager", "Projects Manager", "Item Manager")
+API_ROLES = (
+	"Purchase User",
+	"Purchase Manager",
+	"Purchase Master Manager",
+	"Projects Manager",
+	"Item Manager",
+	"Accounts User",  # purchase invoices and payment entries
+)
 
 
 def ensure():
 	_company()
+	_wht_account()
 	_item_group()
 	for code, name in COST_ITEMS.items():
 		_cost_item(code, name)
@@ -45,6 +56,22 @@ def _company():
 			"default_currency": "THB",
 			"create_chart_of_accounts_based_on": "Standard Template",
 			"chart_of_accounts": "Standard",
+		}
+	).insert()
+
+
+def _wht_account():
+	if frappe.db.exists("Account", {"account_name": WHT_ACCOUNT_NAME, "company": COMPANY}):
+		return
+	parent = frappe.db.get_value("Account", {"account_name": "Duties and Taxes", "company": COMPANY, "is_group": 1})
+	frappe.get_doc(
+		{
+			"doctype": "Account",
+			"account_name": WHT_ACCOUNT_NAME,
+			"parent_account": parent,
+			"company": COMPANY,
+			"account_type": "Tax",
+			"root_type": "Liability",
 		}
 	).insert()
 
