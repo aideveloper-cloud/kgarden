@@ -1,6 +1,10 @@
 {
 	"_comment": "K Garden golden dataset: the single source of test master data. Load with: bench --site <site> execute kgarden.seed.load",
 	"company": "K Garden",
+	"company_warehouse_defaults": {
+		"default_wip_warehouse": "งานที่กำลังดำเนินการ",
+		"default_fg_warehouse": "สินค้าสำเร็จรูป"
+	},
 	"warehouses": [
 		{"warehouse_name": "คลังวัตถุดิบ", "parent": "ทุกคลังสินค้า"}
 	],

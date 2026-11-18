@@ -108,7 +108,8 @@ required_apps = ["erpnext"]
 # ------------
 
 # before_install = "kgarden.install.before_install"
-# after_install = "kgarden.install.after_install"
+after_install = "kgarden.setup.ensure_custom_fields"
+after_migrate = "kgarden.setup.ensure_custom_fields"
 
 # Uninstallation
 # ------------
@@ -307,3 +308,10 @@ require_type_annotated_api_methods = True
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
 
+# Raw materials reach production through the WIP warehouse (WMS transfers in, MES backflushes out).
+doc_events = {
+	"Work Order": {
+		"before_validate": "kgarden.manufacturing.work_order.enforce_wip_backflush",
+		"validate": "kgarden.manufacturing.work_order.enforce_wip_backflush",
+	},
+}

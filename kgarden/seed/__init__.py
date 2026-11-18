@@ -53,6 +53,14 @@ def load(path: str | None = None) -> dict:
 		item.set("item_defaults", [{"company": company, "default_warehouse": wh(row["default_warehouse"])}])
 		item.save()
 
+	# Default WIP / finished-goods warehouses for Work Orders live on Company in this ERPNext version.
+	company_doc = frappe.get_doc("Company", company)
+	for field, warehouse in data.get("company_warehouse_defaults", {}).items():
+		if not company_doc.meta.has_field(field):
+			frappe.throw(f"Company has no field {field!r}")
+		company_doc.set(field, wh(warehouse))
+	company_doc.save()
+
 	# BOMs are listed children-first, so each sub-assembly BOM exists before its parent needs it.
 	for row in data["boms"]:
 		if frappe.db.exists("BOM", {"item": row["item"], "is_active": 1, "is_default": 1, "docstatus": 1}):
