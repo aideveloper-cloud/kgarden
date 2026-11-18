@@ -119,6 +119,47 @@ CUSTOM_FIELDS = {
 			"search_index": 1,
 		},
 	],
+	# App access: the one place a person gets, changes and loses access to the K Garden apps.
+	"User": [
+		{
+			"fieldname": "kg_access_section",
+			"label": "K Garden: สิทธิ์เข้าใช้แอป",
+			"fieldtype": "Section Break",
+			"insert_after": "roles_permissions_tab",
+		},
+		{
+			"fieldname": "kg_employee_code",
+			"label": "รหัสพนักงาน",
+			"fieldtype": "Data",
+			"insert_after": "kg_access_section",
+			"unique": 1,
+			"search_index": 1,
+			"description": "ใช้ยืนยันตัวที่แท็บเล็ตหน้างานคู่กับ PIN",
+		},
+		{
+			"fieldname": "kg_superadmin",
+			"label": "ผู้ดูแลระบบสูงสุด (เข้าได้ทุกแอปในฐานะแอดมิน)",
+			"fieldtype": "Check",
+			"insert_after": "kg_employee_code",
+		},
+		{
+			"fieldname": "kg_access_managed",
+			"label": "K Garden Access Managed",
+			"fieldtype": "Check",
+			"insert_after": "kg_superadmin",
+			"hidden": 1,
+			"read_only": 1,
+			"no_copy": 1,
+		},
+		{
+			"fieldname": "kg_app_access",
+			"label": "แอปที่เข้าใช้ได้",
+			"fieldtype": "Table",
+			"options": "KG User App Access",
+			"insert_after": "kg_access_managed",
+			"description": "ไม่ได้อยู่ในตาราง = เข้าแอปนั้นไม่ได้ (ยกเว้นผู้ดูแลระบบสูงสุด)",
+		},
+	],
 	"Supplier": [_cerp_id_field("supplier_name")],
 	"Project": [_cerp_id_field("project_name")],
 }
@@ -126,3 +167,10 @@ CUSTOM_FIELDS = {
 
 def ensure_custom_fields():
 	create_custom_fields(CUSTOM_FIELDS, update=True)
+
+
+def after_migrate():
+	ensure_custom_fields()
+	from kgarden.access.setup import ensure as ensure_access
+
+	ensure_access()

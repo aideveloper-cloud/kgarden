@@ -109,7 +109,7 @@ required_apps = ["erpnext"]
 
 # before_install = "kgarden.install.before_install"
 after_install = "kgarden.setup.ensure_custom_fields"
-after_migrate = "kgarden.setup.ensure_custom_fields"
+after_migrate = "kgarden.setup.after_migrate"
 
 # Uninstallation
 # ------------
@@ -310,8 +310,19 @@ require_type_annotated_api_methods = True
 
 # Raw materials reach production through the WIP warehouse (WMS transfers in, MES backflushes out).
 doc_events = {
+	# App access on the User form (kgarden.access.user).
+	"User": {
+		"before_validate": "kgarden.access.user.before_validate",
+		"on_update": "kgarden.access.user.on_update",
+	},
 	"Work Order": {
 		"before_validate": "kgarden.manufacturing.work_order.enforce_wip_backflush",
 		"validate": "kgarden.manufacturing.work_order.enforce_wip_backflush",
 	},
+}
+
+# Sign-in through ERPNext: a Thai "no access" page, and app role/scope in the userinfo.
+override_whitelisted_methods = {
+	"frappe.integrations.oauth2.authorize": "kgarden.access.oauth.authorize",
+	"frappe.integrations.oauth2.openid_profile": "kgarden.access.oauth.openid_profile",
 }

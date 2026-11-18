@@ -1,0 +1,63 @@
+{
+ "doctype": "DocType",
+ "name": "KG User PIN",
+ "module": "K Garden",
+ "custom": 0,
+ "istable": 0,
+ "editable_grid": 0,
+ "engine": "InnoDB",
+ "track_changes": 1,
+ "fields": [
+  {
+   "fieldname": "user",
+   "fieldtype": "Link",
+   "label": "User",
+   "options": "User",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "pin_hash",
+   "fieldtype": "Data",
+   "label": "PIN Hash",
+   "read_only": 1,
+   "hidden": 1
+  },
+  {
+   "fieldname": "set_on",
+   "fieldtype": "Datetime",
+   "label": "Set On",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "set_by",
+   "fieldtype": "Link",
+   "label": "Set By",
+   "options": "User",
+   "read_only": 1
+  }
+ ],
+ "permissions": [
+  {
+   "role": "KG Super Admin",
+   "read": 1,
+   "delete": 1,
+   "report": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "owner": "Administrator",
+ "modified_by": "Administrator",
+ "creation": "2026-11-18 16:00:00.000000",
+ "modified": "2026-11-18 16:00:00.000000",
+ "index_web_pages_for_search": 0,
+ "row_format": "Dynamic",
+ "states": [],
+ "links": [],
+ "actions": [],
+ "autoname": "field:user",
+ "naming_rule": "By fieldname"
+}
