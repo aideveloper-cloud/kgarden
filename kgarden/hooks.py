@@ -57,6 +57,8 @@ required_apps = ["erpnext"]
 
 # include js in doctype views
 # doctype_js = {"doctype" : "public/js/doctype.js"}
+# User form: the K Garden super admin sets a person's tablet PIN (kgarden.access.api.set_pin).
+doctype_js = {"User": "public/js/user.js"}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_kanban_js = {"doctype" : "public/js/doctype_kanban.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}

@@ -4,7 +4,8 @@
   whether that person may use the app (and the scope, e.g. a warehouse) and with which role.
 * ``access_changes``: who gained, changed or lost access to an app since a time, so the app can
   end sessions without waiting for them to expire.
-* ``set_pin``: a super admin sets a person's tablet PIN (stored as a hash only).
+* ``set_pin`` / ``pin_status``: a super admin sets a person's tablet PIN (stored as a hash only)
+  from the User form, and sees when it was last set.
 """
 
 import frappe
@@ -32,12 +33,27 @@ def set_pin(user: str, pin: str) -> dict:
 		frappe.throw(_("A PIN is 4 to 6 digits"))
 	if not frappe.db.exists("User", user):
 		frappe.throw(_("No user {0}").format(user))
+	if not frappe.db.get_value("User", user, "kg_employee_code"):
+		# Tablets find the person by employee code; a PIN without one could never be used.
+		frappe.throw(_("Give {0} an employee code before setting a PIN").format(user))
 	values = {"pin_hash": pbkdf2_sha256.hash(pin), "set_on": now_datetime(), "set_by": frappe.session.user}
 	if frappe.db.exists("KG User PIN", user):
 		frappe.db.set_value("KG User PIN", user, values)
 	else:
 		frappe.get_doc({"doctype": "KG User PIN", "user": user, **values}).insert(ignore_permissions=True)
 	return {"user": user, "pin_set": True}
+
+
+@frappe.whitelist(methods=["GET"])
+def pin_status(user: str) -> dict:
+	"""Whether a person has a tablet PIN, and when and by whom it was set (never the PIN)."""
+	if not is_super_admin():
+		frappe.throw(_("Only a K Garden super admin can see PINs"), frappe.PermissionError)
+	row = frappe.db.get_value("KG User PIN", user, ["set_on", "set_by"], as_dict=True)
+	if not row:
+		return {"user": user, "pin_set": False}
+	set_by = frappe.db.get_value("User", row.set_by, "full_name") or row.set_by
+	return {"user": user, "pin_set": True, "set_on": str(row.set_on), "set_by": set_by}
 
 
 @frappe.whitelist(methods=["POST"])
