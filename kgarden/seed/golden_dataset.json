@@ -1,0 +1,53 @@
+{
+	"_comment": "K Garden golden dataset: the single source of test master data. Load with: bench --site <site> execute kgarden.seed.load",
+	"company": "K Garden",
+	"company_warehouse_defaults": {
+		"default_wip_warehouse": "งานที่กำลังดำเนินการ",
+		"default_fg_warehouse": "สินค้าสำเร็จรูป"
+	},
+	"warehouses": [
+		{"warehouse_name": "คลังวัตถุดิบ", "parent": "ทุกคลังสินค้า"}
+	],
+	"items": [
+		{"item_code": "RM-WOOD-PANEL", "item_name": "แผ่นไม้สน 30x60 ซม. (Pine Panel)", "item_group": "Raw Material", "stock_uom": "Nos", "valuation_rate": 45, "default_warehouse": "คลังวัตถุดิบ"},
+		{"item_code": "RM-SCREW", "item_name": "สกรูสแตนเลส 1 นิ้ว (Stainless Screw)", "item_group": "Raw Material", "stock_uom": "Nos", "valuation_rate": 0.5, "default_warehouse": "คลังวัตถุดิบ"},
+		{"item_code": "RM-WOOD-STAIN", "item_name": "สีย้อมไม้กันน้ำ (Wood Stain)", "item_group": "Raw Material", "stock_uom": "Litre", "valuation_rate": 320, "default_warehouse": "คลังวัตถุดิบ"},
+		{"item_code": "RM-DRIP-TRAY", "item_name": "ถาดรองน้ำพลาสติก (Drip Tray)", "item_group": "Raw Material", "stock_uom": "Nos", "valuation_rate": 35, "default_warehouse": "คลังวัตถุดิบ"},
+		{"item_code": "RM-PEAT-MOSS", "item_name": "พีทมอส (Peat Moss)", "item_group": "Raw Material", "stock_uom": "Kg", "valuation_rate": 28, "default_warehouse": "คลังวัตถุดิบ"},
+		{"item_code": "RM-COMPOST", "item_name": "ปุ๋ยหมัก (Compost)", "item_group": "Raw Material", "stock_uom": "Kg", "valuation_rate": 12, "default_warehouse": "คลังวัตถุดิบ"},
+		{"item_code": "RM-PERLITE", "item_name": "เพอร์ไลต์ (Perlite)", "item_group": "Raw Material", "stock_uom": "Kg", "valuation_rate": 60, "default_warehouse": "คลังวัตถุดิบ"},
+		{"item_code": "SA-PLANTER-BOX", "item_name": "กล่องปลูกไม้ประกอบแล้ว (Planter Box)", "item_group": "Sub Assemblies", "stock_uom": "Nos", "default_warehouse": "งานที่กำลังดำเนินการ"},
+		{"item_code": "SA-SOIL-MIX", "item_name": "ดินผสมพร้อมปลูก (Potting Soil Mix)", "item_group": "Sub Assemblies", "stock_uom": "Kg", "default_warehouse": "งานที่กำลังดำเนินการ"},
+		{"item_code": "FG-PLANTER-SET", "item_name": "ชุดกระถางปลูกต้นไม้ K Garden (Planter Set)", "item_group": "Products", "stock_uom": "Nos", "default_warehouse": "สินค้าสำเร็จรูป"}
+	],
+	"boms": [
+		{
+			"item": "SA-PLANTER-BOX",
+			"quantity": 1,
+			"items": [
+				{"item_code": "RM-WOOD-PANEL", "qty": 4},
+				{"item_code": "RM-SCREW", "qty": 16},
+				{"item_code": "RM-WOOD-STAIN", "qty": 0.2}
+			]
+		},
+		{
+			"item": "SA-SOIL-MIX",
+			"quantity": 10,
+			"_comment": "Batch BOM: 10 kg per run, so the query must normalise by BOM quantity",
+			"items": [
+				{"item_code": "RM-PEAT-MOSS", "qty": 6},
+				{"item_code": "RM-COMPOST", "qty": 3},
+				{"item_code": "RM-PERLITE", "qty": 1}
+			]
+		},
+		{
+			"item": "FG-PLANTER-SET",
+			"quantity": 1,
+			"items": [
+				{"item_code": "SA-PLANTER-BOX", "qty": 1},
+				{"item_code": "SA-SOIL-MIX", "qty": 5},
+				{"item_code": "RM-DRIP-TRAY", "qty": 1}
+			]
+		}
+	]
+}

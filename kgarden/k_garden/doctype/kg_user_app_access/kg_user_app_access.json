@@ -1,0 +1,59 @@
+{
+ "doctype": "DocType",
+ "name": "KG User App Access",
+ "module": "K Garden",
+ "custom": 0,
+ "istable": 1,
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "track_changes": 0,
+ "fields": [
+  {
+   "fieldname": "app",
+   "fieldtype": "Link",
+   "label": "App",
+   "options": "KG App",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 3
+  },
+  {
+   "fieldname": "app_role",
+   "fieldtype": "Data",
+   "label": "Role",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 2,
+   "description": "A Role Code of the app"
+  },
+  {
+   "fieldname": "scope_doctype",
+   "fieldtype": "Data",
+   "label": "Scope DocType",
+   "read_only": 1,
+   "fetch_from": "app.scope_doctype",
+   "hidden": 1
+  },
+  {
+   "fieldname": "scope_value",
+   "fieldtype": "Dynamic Link",
+   "label": "Scope",
+   "options": "scope_doctype",
+   "in_list_view": 1,
+   "columns": 5,
+   "description": "Empty = everything in the app"
+  }
+ ],
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "owner": "Administrator",
+ "modified_by": "Administrator",
+ "creation": "2026-11-18 16:00:00.000000",
+ "modified": "2026-11-18 16:00:00.000000",
+ "index_web_pages_for_search": 0,
+ "row_format": "Dynamic",
+ "states": [],
+ "links": [],
+ "actions": []
+}

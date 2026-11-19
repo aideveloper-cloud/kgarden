@@ -1,0 +1,130 @@
+{
+ "doctype": "DocType",
+ "name": "KG App",
+ "module": "K Garden",
+ "custom": 0,
+ "istable": 0,
+ "editable_grid": 0,
+ "engine": "InnoDB",
+ "track_changes": 1,
+ "fields": [
+  {
+   "fieldname": "app_code",
+   "fieldtype": "Data",
+   "label": "App Code",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1,
+   "description": "WMS, CERP, MES_FLOOR, ERPNEXT ..."
+  },
+  {
+   "fieldname": "app_name",
+   "fieldtype": "Data",
+   "label": "App Name",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enabled",
+   "default": "1",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "is_desk",
+   "fieldtype": "Check",
+   "label": "Is the ERPNext desk",
+   "description": "Access to ERPNext itself: roles come from each role's ERPNext Roles"
+  },
+  {
+   "fieldname": "cb1",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "access_role",
+   "fieldtype": "Link",
+   "label": "Access Role",
+   "options": "Role",
+   "read_only": 1,
+   "description": "Granted to every user who may use this app; the OAuth Client allows only this role and KG Super Admin"
+  },
+  {
+   "fieldname": "oauth_client",
+   "fieldtype": "Link",
+   "label": "OAuth Client",
+   "options": "OAuth Client"
+  },
+  {
+   "fieldname": "base_url",
+   "fieldtype": "Data",
+   "label": "App URL",
+   "options": "URL"
+  },
+  {
+   "fieldname": "scope_section",
+   "fieldtype": "Section Break",
+   "label": "Scope"
+  },
+  {
+   "fieldname": "scope_doctype",
+   "fieldtype": "Link",
+   "label": "Scope DocType",
+   "options": "DocType",
+   "description": "What a grant can be limited to, e.g. Warehouse or Project. Empty = no scope"
+  },
+  {
+   "fieldname": "scope_required",
+   "fieldtype": "Check",
+   "label": "Scope Required",
+   "depends_on": "scope_doctype"
+  },
+  {
+   "fieldname": "roles_section",
+   "fieldtype": "Section Break",
+   "label": "Roles in this app"
+  },
+  {
+   "fieldname": "roles",
+   "fieldtype": "Table",
+   "label": "Roles",
+   "options": "KG App Role",
+   "reqd": 1
+  }
+ ],
+ "permissions": [
+  {
+   "role": "KG Super Admin",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1,
+   "print": 1,
+   "email": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "report": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "owner": "Administrator",
+ "modified_by": "Administrator",
+ "creation": "2026-11-18 16:00:00.000000",
+ "modified": "2026-11-18 16:00:00.000000",
+ "index_web_pages_for_search": 0,
+ "row_format": "Dynamic",
+ "states": [],
+ "links": [],
+ "actions": [],
+ "autoname": "field:app_code",
+ "naming_rule": "By fieldname",
+ "title_field": "app_name",
+ "show_title_field_in_link": 1
+}
