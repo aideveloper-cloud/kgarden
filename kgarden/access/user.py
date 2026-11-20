@@ -16,6 +16,7 @@ for users this form has managed (``kg_access_managed``).
 import frappe
 from frappe import _
 
+from kgarden.access.login import sync_login_name
 from kgarden.k_garden.doctype.kg_app.kg_app import SUPER_ADMIN_ROLE, split_roles
 
 ACCESS_FIELDS = ("kg_superadmin", "kg_employee_code", "kg_app_access")
@@ -55,10 +56,15 @@ def before_validate(doc, method=None):
 
 	if doc.kg_employee_code:
 		doc.kg_employee_code = doc.kg_employee_code.strip().upper()
+	sync_login_name(doc, before)
 	if doc.kg_superadmin or doc.get("kg_app_access"):
 		doc.kg_access_managed = 1
 	if not doc.kg_access_managed:
 		return
+	# Everyone signs in with their employee code; checked when access is given or changed, so people
+	# set up before this rule are asked for it the next time a super admin changes their access.
+	if doc.enabled and not doc.kg_employee_code and (changed or doc.is_new()):
+		frappe.throw(_("ใส่รหัสพนักงานก่อน: ทุกระบบของ K Garden เข้าสู่ระบบด้วยรหัสพนักงานและรหัสผ่าน"))
 
 	apps = _apps()
 	granted, seen = set(), set()

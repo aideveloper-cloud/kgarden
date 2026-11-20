@@ -174,3 +174,6 @@ def after_migrate():
 	from kgarden.access.setup import ensure as ensure_access
 
 	ensure_access()
+	from kgarden.access.login import ensure as ensure_login
+
+	ensure_login()
