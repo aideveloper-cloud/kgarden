@@ -43,7 +43,7 @@ required_apps = ["erpnext"]
 
 # include js, css files in header of web template
 # web_include_css = "/assets/kgarden/css/kgarden.css"
-# web_include_js = "/assets/kgarden/js/kgarden.js"
+web_include_js = "/assets/kgarden/js/login.js"
 
 # include custom scss in every website theme (without file extension ".scss")
 # website_theme_scss = "kgarden/public/scss/website"
@@ -112,6 +112,9 @@ doctype_js = {"User": "public/js/user.js"}
 # before_install = "kgarden.install.before_install"
 after_install = "kgarden.setup.ensure_custom_fields"
 after_migrate = "kgarden.setup.after_migrate"
+
+# The login page asks for the employee code (kgarden.access.login).
+update_website_context = "kgarden.access.login.update_website_context"
 
 # Uninstallation
 # ------------
