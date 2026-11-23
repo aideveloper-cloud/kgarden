@@ -6,6 +6,7 @@
   end sessions without waiting for them to expire.
 * ``set_pin`` / ``pin_status``: a super admin sets a person's tablet PIN (stored as a hash only)
   from the User form, and sees when it was last set.
+* ``app_roles``: the roles of one app, offered in the Role dropdown of the User form's access table.
 """
 
 import frappe
@@ -86,3 +87,20 @@ def access_changes(app_code: str, since: str) -> list[dict]:
 		limit_page_length=1000,
 	)
 	return [{**app_access(u.name, app_code), "user": u.name, "changed_at": str(u.modified)} for u in users]
+
+
+@frappe.whitelist(methods=["GET", "POST"])
+def app_roles(app: str | None = None, txt: str | None = None) -> list[dict]:
+	"""Roles of ``app`` for the Role dropdown on the User form (value = role code)."""
+	if not is_super_admin():
+		frappe.throw(_("Only a K Garden super admin grants app access"), frappe.PermissionError)
+	if not app:
+		return []
+	txt = (txt or "").strip().lower()
+	rows = frappe.get_all("KG App Role", filters={"parent": app, "parenttype": "KG App"},
+	                      fields=["role_code", "role_label"], order_by="idx")
+	return [
+		{"value": r.role_code, "label": f"{r.role_label} ({r.role_code})"}
+		for r in rows
+		if not txt or txt in r.role_code.lower() or txt in (r.role_label or "").lower()
+	]

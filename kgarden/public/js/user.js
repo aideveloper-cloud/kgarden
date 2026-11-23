@@ -4,12 +4,39 @@
 
 frappe.ui.form.on("User", {
 	refresh(frm) {
+		kgardenRoleDropdown(frm);
 		if (frm.is_new() || !kgardenIsSuperAdmin()) return;
 		frm.add_custom_button("ตั้ง PIN แท็บเล็ต", () => kgardenSetPin(frm));
 		kgardenShowPinStatus(frm);
 	},
 	kg_employee_code(frm) {
 		kgardenShowPinStatus(frm);
+	},
+});
+
+// App access table: the Role column offers only the roles of the app chosen on that row.
+function kgardenRoleDropdown(frm) {
+	const grid = frm.fields_dict.kg_app_access?.grid;
+	if (!grid) return;
+	grid.update_docfield_property("app_role", "get_query", (doc, cdt, cdn) => ({
+		query: "kgarden.access.api.app_roles",
+		params: { app: locals[cdt][cdn]?.app || "" },
+	}));
+}
+
+frappe.ui.form.on("KG User App Access", {
+	app(frm, cdt, cdn) {
+		const row = locals[cdt][cdn];
+		if (!row.app) {
+			frappe.model.set_value(cdt, cdn, "app_role", "");
+			return;
+		}
+		frappe.xcall("kgarden.access.api.app_roles", { app: row.app }, "GET").then((roles) => {
+			const codes = roles.map((r) => r.value);
+			// An app with one role needs no choice; a role from another app is cleared.
+			if (codes.length === 1) frappe.model.set_value(cdt, cdn, "app_role", codes[0]);
+			else if (!codes.includes(row.app_role)) frappe.model.set_value(cdt, cdn, "app_role", "");
+		});
 	},
 });
 
