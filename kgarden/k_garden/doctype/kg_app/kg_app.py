@@ -37,6 +37,9 @@ class KGApp(Document):
 	def on_update(self):
 		if self.oauth_client:
 			set_client_roles(self.oauth_client, [self.access_role, SUPER_ADMIN_ROLE])
+		from kgarden.access.desktop import sync_desktop_icons
+
+		sync_desktop_icons()
 
 
 def split_roles(value: str | None) -> list[str]:

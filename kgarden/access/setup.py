@@ -81,6 +81,9 @@ def ensure():
 			if code not in have:
 				doc.append("roles", {"role_code": code, "role_label": label, "erpnext_roles": erp_roles})
 		doc.save(ignore_permissions=True)
+	from kgarden.access.desktop import sync_desktop_icons
+
+	sync_desktop_icons()
 	frappe.db.commit()
 
 

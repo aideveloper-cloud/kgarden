@@ -72,6 +72,9 @@ def provision(urls: str | dict | None = None, rotate: int = 0) -> str:
 		if app.oauth_client:
 			c = frappe.get_doc("OAuth Client", app.oauth_client)
 			clients[code] = (c.client_id, c.get_password("client_secret"))
+	from kgarden.access.desktop import sync_desktop_icons
+
+	sync_desktop_icons()  # base_url was set with db_set, which skips KG App.on_update
 	frappe.db.commit()
 
 	abbr = frappe.db.get_value("Company", construction.COMPANY, "abbr")
