@@ -30,11 +30,15 @@ def setup_company(company: str, abbr: str, admin_email: str, language: str = "th
 		return "setup already complete"
 	from frappe.desk.page.setup_wizard.setup_wizard import setup_complete
 
+	# The wizard takes the language by name; masters it creates (warehouses, accounts) are named in
+	# the current request language, so switch to it first (Thai warehouse names, as the bridges expect).
+	lang_name = frappe.db.get_value("Language", language, "language_name") or language
+	frappe.local.lang = frappe.db.get_value("Language", {"language_name": lang_name}, "name") or language
 	year = frappe.utils.getdate().year
 	fy_start = fy_start or f"{year}-01-01"
 	fy_end = frappe.utils.add_days(frappe.utils.add_years(fy_start, 1), -1)
 	setup_complete({
-		"language": language, "country": "Thailand", "timezone": "Asia/Bangkok", "currency": "THB",
+		"language": lang_name, "country": "Thailand", "timezone": "Asia/Bangkok", "currency": "THB",
 		"full_name": "Administrator", "email": admin_email,
 		"company_name": company, "company_abbr": abbr, "chart_of_accounts": chart_of_accounts,
 		"fy_start_date": fy_start, "fy_end_date": str(fy_end), "setup_demo": 0,
