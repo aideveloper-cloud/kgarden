@@ -87,7 +87,8 @@ def provision(urls: str | dict | None = None, rotate: int = 0) -> str:
 		"CERP_BRIDGE_COMPANY": construction.COMPANY,
 		"CERP_BRIDGE_VAT_ACCOUNT": vat or "",
 		"CERP_BRIDGE_WHT_ACCOUNT": f"{construction.WHT_ACCOUNT_NAME} - {abbr}",
-		"CERP_BRIDGE_SUPPLIER_GROUP": frappe.db.get_value("Supplier Group", {"is_group": 0}, "name") or "",
+		"CERP_BRIDGE_SUPPLIER_GROUP": (frappe.db.exists("Supplier Group", "Local")
+		                               or frappe.db.get_value("Supplier Group", {"is_group": 0}, "name") or ""),
 	}
 	# For the apps' own configuration (ConstructionERP and WMS .env), not for the K Garden stack.
 	apps = {
