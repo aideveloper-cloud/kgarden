@@ -1,7 +1,7 @@
 """K Garden apps, their roles and their OAuth Clients (sign-in through ERPNext).
 
-Idempotent; runs after migrate. Redirect URIs are the local development addresses; change them on
-the OAuth Client when an app is deployed.
+Idempotent; runs after migrate. Redirect URIs and addresses start as the local development ones;
+deploy.provision sets the deployed ones, and this never overwrites them.
 """
 
 import frappe
@@ -70,17 +70,23 @@ def ensure():
 				"app_name": spec["app_name"],
 				"is_desk": spec.get("is_desk", 0),
 				"scope_doctype": spec.get("scope_doctype"),
-				"base_url": spec.get("base_url"),
 				"oauth_client": client or doc.get("oauth_client"),
 			}
 		)
 		if doc.is_new():
 			doc.enabled = 1
+		# The development address only seeds a new app: a deployed address (set by deploy.provision
+		# or by hand) must survive every migrate.
+		if not doc.base_url:
+			doc.base_url = spec.get("base_url")
 		have = {r.role_code for r in doc.roles}
 		for code, label, erp_roles in spec["roles"]:
 			if code not in have:
 				doc.append("roles", {"role_code": code, "role_label": label, "erpnext_roles": erp_roles})
 		doc.save(ignore_permissions=True)
+	from kgarden.access.desktop import sync_desktop_icons
+
+	sync_desktop_icons()
 	frappe.db.commit()
 
 

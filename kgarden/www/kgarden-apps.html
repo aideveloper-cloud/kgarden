@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="th">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>K Garden</title>
+	<link rel="icon" href="/assets/kgarden/images/apps/kgarden.svg">
+	<style>
+		:root { --bg: #f7f7f5; --card: #ffffff; --text: #1f2421; --muted: #6b716d; --line: #e4e6e3; --accent: #15803d; }
+		@media (prefers-color-scheme: dark) {
+			:root { --bg: #151816; --card: #1f2321; --text: #eef0ee; --muted: #a3aaa5; --line: #2e332f; --accent: #4ade80; }
+		}
+		* { box-sizing: border-box; }
+		body { margin: 0; background: var(--bg); color: var(--text);
+			font-family: "Sarabun", "Noto Sans Thai", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+		main { max-width: 760px; margin: 0 auto; padding: 32px 16px 48px; }
+		header { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
+		header img { width: 40px; height: 40px; }
+		h1 { font-size: 22px; margin: 0; }
+		.who { color: var(--muted); font-size: 14px; margin-top: 2px; }
+		.back { margin-left: auto; color: var(--muted); text-decoration: none; font-size: 14px; }
+		.back:hover { color: var(--text); }
+		.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+		.app { display: flex; align-items: center; gap: 14px; padding: 18px; background: var(--card);
+			border: 1px solid var(--line); border-radius: 14px; text-decoration: none; color: var(--text);
+			min-height: 88px; transition: border-color .15s, transform .15s; }
+		.app:hover, .app:focus-visible { border-color: var(--accent); transform: translateY(-1px); outline: none; }
+		.app img { width: 52px; height: 52px; flex: none; }
+		.app span { font-size: 16px; font-weight: 600; line-height: 1.35; }
+		.empty { color: var(--muted); padding: 24px; background: var(--card); border: 1px dashed var(--line); border-radius: 14px; }
+	</style>
+</head>
+<body>
+<main>
+	<header>
+		<img src="/assets/kgarden/images/apps/kgarden.svg" alt="">
+		<div>
+			<h1>แอป K Garden</h1>
+			<div class="who">{{ full_name }}</div>
+		</div>
+		<a class="back" href="/desk">← กลับเดสก์ท็อป</a>
+	</header>
+	{% if apps %}
+	<div class="grid">
+		{% for app in apps %}
+		<a class="app" href="{{ app.url }}" target="_blank" rel="noopener">
+			<img src="{{ app.logo }}" alt="">
+			<span>{{ app.label }}</span>
+		</a>
+		{% endfor %}
+	</div>
+	{% else %}
+	<p class="empty">ยังไม่มีแอปที่คุณใช้ได้ ติดต่อผู้ดูแลระบบให้เพิ่มสิทธิ์ในหน้าผู้ใช้</p>
+	{% endif %}
+</main>
+</body>
+</html>

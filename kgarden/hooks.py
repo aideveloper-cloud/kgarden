@@ -14,16 +14,18 @@ use_json_request_body = True
 
 required_apps = ["erpnext"]
 
-# Each item in the list will be shown as an app in the apps page
-# add_to_apps_screen = [
-# 	{
-# 		"name": "kgarden",
-# 		"logo": "/assets/kgarden/logo.png",
-# 		"title": "K Garden",
-# 		"route": "/kgarden",
-# 		"has_permission": "kgarden.api.permission.has_app_permission",
-# 	}
-# ]
+# One "K Garden" tile on the desk's Apps screen: it opens /kgarden-apps, the person's own list of
+# K Garden apps (MES floor tablets, ConstructionERP, WMS). Shown only to people with at least one.
+add_to_apps_screen = [
+	{
+		"name": "kgarden",
+		"logo": "/assets/kgarden/images/apps/kgarden.svg",
+		"title": "K Garden",
+		"route": "/kgarden-apps",
+		"has_permission": "kgarden.access.desktop.has_any_app",
+		"sequence_id": 2,
+	}
+]
 
 # The dock, the rail down the left of the desk, is a document rather than a hook. Author it in
 # Manage Dock on a developer-mode site and press Export to App, and it is written to

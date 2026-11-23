@@ -1,0 +1,28 @@
+{
+ "app": "kgarden",
+ "bg_color": "gray",
+ "creation": "2026-11-23 14:07:42.098140",
+ "docstatus": 0,
+ "doctype": "Desktop Icon",
+ "hidden": 0,
+ "icon_type": "App",
+ "idx": 0,
+ "label": "ConstructionERP",
+ "link": "http://127.0.0.1:5173",
+ "link_type": "External",
+ "logo_url": "/assets/kgarden/images/apps/cerp.svg",
+ "modified": "2026-11-23 14:07:42.098140",
+ "modified_by": "Administrator",
+ "name": "ConstructionERP",
+ "owner": "Administrator",
+ "restrict_removal": 1,
+ "roles": [
+  {
+   "role": "KG App: CERP"
+  },
+  {
+   "role": "KG Super Admin"
+  }
+ ],
+ "standard": 1
+}

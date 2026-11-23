@@ -1,0 +1,28 @@
+{
+ "app": "kgarden",
+ "bg_color": "gray",
+ "creation": "2026-11-23 14:07:41.939230",
+ "docstatus": 0,
+ "doctype": "Desktop Icon",
+ "hidden": 0,
+ "icon_type": "App",
+ "idx": 0,
+ "label": "\u0e41\u0e17\u0e47\u0e1a\u0e40\u0e25\u0e47\u0e15\u0e2b\u0e19\u0e49\u0e32\u0e07\u0e32\u0e19\u0e1c\u0e25\u0e34\u0e15 (MES)",
+ "link": "http://127.0.0.1:5180",
+ "link_type": "External",
+ "logo_url": "/assets/kgarden/images/apps/mes.svg",
+ "modified": "2026-11-23 14:07:41.939230",
+ "modified_by": "Administrator",
+ "name": "\u0e41\u0e17\u0e47\u0e1a\u0e40\u0e25\u0e47\u0e15\u0e2b\u0e19\u0e49\u0e32\u0e07\u0e32\u0e19\u0e1c\u0e25\u0e34\u0e15 (MES)",
+ "owner": "Administrator",
+ "restrict_removal": 1,
+ "roles": [
+  {
+   "role": "KG App: MES_FLOOR"
+  },
+  {
+   "role": "KG Super Admin"
+  }
+ ],
+ "standard": 1
+}
