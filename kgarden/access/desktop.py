@@ -1,4 +1,8 @@
-"""Desktop icons for the K Garden apps (the grid people see first on the ERPNext desk).
+"""The K Garden apps on the ERPNext desk.
+
+The desk's Apps screen gets one "K Garden" tile (hooks.add_to_apps_screen) leading to
+/kgarden-apps, which lists `my_apps()`. For sites that use Frappe's Desktop Icon grid instead,
+`sync_desktop_icons` keeps one icon per app as well.
 
 One icon per app that has an address (KG App.base_url), opening it in a new tab. An icon is shown
 only to people who may use the app (its access role, given from the User form) and to super
@@ -45,3 +49,27 @@ def sync_desktop_icons() -> None:
 			changed = True
 	if changed:
 		clear_every_users_desktop_icons()
+
+
+def my_apps(user: str | None = None) -> list[dict]:
+	"""The K Garden apps this person may open: enabled, with an address, and either their access
+	role or KG Super Admin. Ordered as on the desktop."""
+	from kgarden.access.user import is_super_admin
+
+	user = user or frappe.session.user
+	if user == "Guest":
+		return []
+	roles = set(frappe.get_roles(user))
+	admin = is_super_admin(user)
+	out = []
+	for code, (label, logo) in ICONS.items():
+		app = frappe.db.get_value("KG App", code, ["enabled", "base_url", "access_role"], as_dict=True)
+		if not app or not app.enabled or not app.base_url:
+			continue
+		if admin or app.access_role in roles:
+			out.append({"code": code, "label": label, "logo": logo, "url": app.base_url.rstrip("/")})
+	return out
+
+
+def has_any_app() -> bool:
+	return bool(my_apps())
