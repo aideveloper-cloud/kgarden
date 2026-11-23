@@ -88,10 +88,29 @@ CUSTOM_FIELDS = {
 			"in_standard_filter": 1,
 			"search_index": 1,
 		},
+		# Retention (เงินประกันผลงาน) the contract lets us hold back from this bill. It stays
+		# owed to the supplier on this invoice until it is released and paid.
+		{
+			"fieldname": "kg_retention_amount",
+			"label": "เงินประกันผลงาน (Retention)",
+			"fieldtype": "Currency",
+			"options": "currency",
+			"insert_after": "kg_cerp_invoice_number",
+			"read_only": 1,
+			"no_copy": 1,
+		},
 	],
 	# Thai withholding tax deducted on the payment (หัก ณ ที่จ่าย), for ภ.ง.ด.3 / 53.
 	"Payment Entry": [
 		_key_field("party"),
+		{
+			"fieldname": "kg_retention_held",
+			"label": "เงินประกันผลงานที่หักไว้ (Retention Held)",
+			"fieldtype": "Currency",
+			"insert_after": "kg_wht_certificate_no",
+			"read_only": 1,
+			"no_copy": 1,
+		},
 		{
 			"fieldname": "kg_wht_type",
 			"label": "WHT Income Type",
